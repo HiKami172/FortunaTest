@@ -1,4 +1,3 @@
-CalculatorTest/.vs/
-CalculatorTest/bin/
-CalculatorTest/obj/
-CalculatorTest/packages/
+.vs/
+bin/
+obj/
