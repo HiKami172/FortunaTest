@@ -1,7 +1,7 @@
 # FortunaTest
 Repository includes test project for Fortuna X3 Application
 ## About App:
-...
+..
 
 ### Test project version: 1.0
 
