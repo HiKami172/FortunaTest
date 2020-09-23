@@ -24,6 +24,7 @@ namespace FortunaTest.Test
             AppMenyBarOptions[1].Click();
             Thread.Sleep(TimeToSleep);
 
+            //"New file" btn click
             Actions PointerActions = new Actions(AppSession);
             PointerActions.MoveByOffset(0, 20).Click();
             PointerActions.Perform();

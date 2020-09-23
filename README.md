@@ -13,7 +13,6 @@ Repository includes test project for Fortuna X3 Application
 ## Test project Launch:
 - Clone current repository
 - Launch project solution using MS Visual Studio 19
-- Set "Release" configuration and "x64" platform target
 - Open "Test Explorer" VS tool 
 - Click "Run all tests" button
 
