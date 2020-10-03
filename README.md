@@ -1,7 +1,7 @@
 # FortunaTest
 Repository includes test project for Fortuna X3 Application
 ## About App:
-..
+...
 
 ### Test project version: 1.0
 
@@ -12,7 +12,8 @@ Repository includes test project for Fortuna X3 Application
 
 ## Test project Launch:
 - Clone current repository
-- Launch project solution using MS Visual Studio 19
+- Put Fortuna installation folder(with "setup.exe" file) into the project folder and name it "FortunaInstall"
+- Launch project solution as administrator using MS Visual Studio 19
 - Open "Test Explorer" VS tool 
 - Click "Run all tests" button
 
