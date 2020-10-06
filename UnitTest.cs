@@ -32,8 +32,8 @@ namespace FortunaTest
             desktopSession = new WindowsDriver<WindowsElement>(new Uri(APPDRIVERURL), deskCap);
             Assert.IsNotNull(desktopSession);
 
-            TimeSpan TimeToStart = TimeSpan.FromSeconds(20);
-            desktopSession.Manage().Timeouts().ImplicitWait = TimeToStart;
+            TimeSpan timeToStart = TimeSpan.FromSeconds(20);
+            desktopSession.Manage().Timeouts().ImplicitWait = timeToStart;
         }
 
         [ClassCleanup]
@@ -81,7 +81,7 @@ namespace FortunaTest
 
         private static void OpenFortuna()
         {
-            TimeSpan TimeToWait = TimeSpan.FromSeconds(3);
+            TimeSpan timeToWait = TimeSpan.FromSeconds(3);
 
             IWebElement appShortcut = desktopSession.FindElementByName("Fortuna X3");
             Actions actions = new Actions(desktopSession);
@@ -100,7 +100,7 @@ namespace FortunaTest
 
             cases = new TestCases(appSession);
 
-            appSession.Manage().Timeouts().ImplicitWait = TimeToWait;
+            appSession.Manage().Timeouts().ImplicitWait = timeToWait;
         }
     }
 }

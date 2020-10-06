@@ -10,35 +10,35 @@ namespace FortunaTest.Test
 {
     class TestCases
     {
-        private readonly TimeSpan TimeToSleep = TimeSpan.FromSeconds(2);
-        private RemoteWebDriver AppSession { get; set; }
+        private readonly TimeSpan timeToSleep = TimeSpan.FromSeconds(2);
+        private RemoteWebDriver appSession { get; set; }
 
         public TestCases(RemoteWebDriver appSession)
         {
-            AppSession = appSession;
+            this.appSession = appSession;
         }
 
         public void FileCreation()
         {
-            IWebElement AppMenuBar = AppSession.FindElementByName("Application");
+            IWebElement AppMenuBar = appSession.FindElementByName("Application");
             ReadOnlyCollection<IWebElement> AppMenyBarOptions = AppMenuBar.FindElements(By.XPath(".//*"));
             AppMenyBarOptions[1].Click();
-            Thread.Sleep(TimeToSleep);
+            Thread.Sleep(timeToSleep);
 
             //"New file" btn click
-            Actions PointerActions = new Actions(AppSession);
+            Actions PointerActions = new Actions(appSession);
             PointerActions.MoveByOffset(0, 20).Click();
             PointerActions.Perform();
-            Thread.Sleep(TimeToSleep);
+            Thread.Sleep(timeToSleep);
 
-            IWebElement SetUpDialogue = AppSession.FindElementByName("Document Set-up");
+            IWebElement SetUpDialogue = appSession.FindElementByName("Document Set-up");
             ReadOnlyCollection<IWebElement> SetUpDialogueOptions = SetUpDialogue.FindElements(By.XPath(".//*"));
             SetUpDialogueOptions[3].Click();
-            Thread.Sleep(TimeToSleep);
+            Thread.Sleep(timeToSleep);
 
-            IWebElement NewFileWorkspace = AppSession.FindElementByName("untitled");
+            IWebElement NewFileWorkspace = appSession.FindElementByName("untitled");
             Assert.IsNotNull(NewFileWorkspace);
-            AppSession.Close();
+            appSession.Close();
         }
     }
 }

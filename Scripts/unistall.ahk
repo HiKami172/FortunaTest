@@ -6,16 +6,20 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 Path = %A_ScriptDir%
 Parent := SubStr(Path, 1, InStr(SubStr(Path,1,-1), "\", 0, 0)-1)
 
+timeToStart := 2000
+timeToWait := 700
+
 Run, setup.exe, %Parent%\FortunaInstall
-Sleep, 2000
+Sleep, %timeToStart%
 
 Send {Down 2}{Enter}
-Sleep, 500
+Sleep, %timeToWait%
 
 Send {Enter}
-Sleep, 500
+Sleep, %timeToWait%
 
 Send {Enter}
+
 WinWaitActive, Agfa Fortuna v 13.0 - InstallShield Wizard, Finish
 WinActivate, Agfa Fortuna v 13.0 - InstallShield Wizard
 Send {Enter}

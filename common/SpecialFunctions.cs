@@ -10,6 +10,7 @@ namespace FortunaTest.common
     {
         public static void CompileScripts()
         {
+            TimeSpan timeToEnterCommand = TimeSpan.FromSeconds(1);
             string ScriptsPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\")) + "Scripts\\";
             string installScriptCompilationCommand = @"Ahk2exe.exe /in " + @ScriptsPath + "install.ahk";
             string unistallScriptCompilationCommand = @"Ahk2exe.exe /in " + @ScriptsPath + "unistall.ahk";
@@ -18,16 +19,16 @@ namespace FortunaTest.common
             {
                 WindowStyle = ProcessWindowStyle.Hidden,
                 FileName = "cmd.exe",
-                WorkingDirectory = @"C:\Program Files\AutoHotkey\Compiler",
+                WorkingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\AutoHotkey\Compiler",
                 RedirectStandardInput = true,
                 UseShellExecute = false,
             };
             cmd.StartInfo = cmdOptions;
             cmd.Start();
             cmd.StandardInput.WriteLine(installScriptCompilationCommand);
-            Thread.Sleep(1000);
+            Thread.Sleep(timeToEnterCommand);
             cmd.StandardInput.WriteLine(unistallScriptCompilationCommand);
-            Thread.Sleep(1000);
+            Thread.Sleep(timeToEnterCommand);
             cmd.Close();
         }
 
@@ -40,10 +41,7 @@ namespace FortunaTest.common
         {
             string registryKey = @"SOFTWARE\Classes\ctfile\shell\open\command";
             RegistryKey key = Registry.LocalMachine.OpenSubKey(registryKey);
-            if (key != null)
-                return true;
-            else
-                return false;
+            return key != null ? true : false;
         }
     }
 }
