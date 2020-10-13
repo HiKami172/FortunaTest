@@ -1,18 +1,15 @@
-﻿using System.Runtime.InteropServices;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Appium.Windows;
 
 namespace FortunaTest.common
 {
     public class DesktopHelper
     {
-        [DllImport("user32.dll")]
-        static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
-
-        public static void ShowDesktop()
+        public static void ShowDesktop(WindowsDriver<WindowsElement> desktopSession)
         {
-            keybd_event(0x5B, 0, 0, 0);
-            keybd_event(0x4D, 0, 0, 0);
-            keybd_event(0x5B, 0, 0x2, 0);
+            IWebElement showDesktopBtn = desktopSession.FindElement(By.Name("Show desktop"));
+            showDesktopBtn.Click();
         }
 
         public static void ExecuteAsAdmin(string fileFullPath)

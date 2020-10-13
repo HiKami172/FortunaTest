@@ -41,7 +41,7 @@ namespace FortunaTest.common
         {
             string registryKey = @"SOFTWARE\Classes\ctfile\shell\open\command";
             RegistryKey key = Registry.LocalMachine.OpenSubKey(registryKey);
-            return key != null ? true : false;
+            return key != null;
         }
     }
 }

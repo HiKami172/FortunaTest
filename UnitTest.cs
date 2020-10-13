@@ -44,14 +44,14 @@ namespace FortunaTest
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(-1)]
         public void Installation()
         {
             Assert.IsTrue(SpecialFunctions.IsInstalled());
         }
 
         [TestMethod]
-        [Priority(2)]
+        [Priority(0)]
         public void Launch()
         {
             OpenFortuna();
@@ -59,14 +59,70 @@ namespace FortunaTest
         }
 
         [TestMethod]
-        [Priority(3)]
-        public void FileCreation()
+        [Priority(1)]
+        public void AdminAccLogin()
         {
-            cases.FileCreation();
+            cases.AdminAccLogin();
+        }
+
+        [TestMethod]
+        [Priority(2)]
+        public void AddNewUser()
+        {
+            cases.AddNewUser();
+        }
+
+        [TestMethod]
+        [Priority(3)]
+        public void CreateFile()
+        {
+            cases.CreateFile();
         }
 
         [TestMethod]
         [Priority(4)]
+        public void CheckUserCapabilities()
+        {
+            cases.AccountLogin("username", "password");
+            cases.CheckUserCapabilities();
+        }
+
+        [TestMethod]
+        [Priority(5)]
+        public void AccountLogout()
+        {
+            cases.AccountLogout();
+        }
+
+        [TestMethod]
+        [Priority(6)]
+        public void LoginWithWrongPassword()
+        {
+            cases.LoginWithWrongPassword();
+        }
+
+        [TestMethod]
+        [Priority(7)]
+        public void RemoveUser()
+        {
+            cases.RemoveUser();
+        }
+
+        [TestMethod]
+        [Priority(8)]
+        public void CloseFortuna()
+        {
+            appSession.Close();
+            try
+            {
+                desktopSession.FindElementByName("Fortuna X3");
+                Assert.Fail();
+            }
+            catch { }
+        }
+
+        [TestMethod]
+        [Priority(9)]
         public void Uninstallation()
         {
             ExecuteFromProject("\\Scripts\\unistall.exe");
@@ -85,7 +141,7 @@ namespace FortunaTest
 
             IWebElement appShortcut = desktopSession.FindElementByName("Fortuna X3");
             Actions actions = new Actions(desktopSession);
-            DesktopHelper.ShowDesktop();
+            DesktopHelper.ShowDesktop(desktopSession);
             actions
                 .DoubleClick(appShortcut)
                 .Perform();

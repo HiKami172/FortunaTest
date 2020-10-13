@@ -13,6 +13,7 @@ Repository includes test project for Fortuna X3 Application
 ## Test project Launch:
 - Clone current repository
 - Put Fortuna installation folder(with "setup.exe" file) into the project folder and name it "FortunaInstall"
+- Add txt file with admin username and password written in different lines to project folder and name it "adminInfo"
 - Launch project solution as administrator using MS Visual Studio 19
 - Open "Test Explorer" VS tool 
 - Click "Run all tests" button
