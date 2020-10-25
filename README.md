@@ -9,12 +9,15 @@ Repository includes test project for Fortuna X3 Application
 - Microsoft Visual Studio 2019
 - ОS Windows 8 or newer
 - WinAppDriver v1.2
+- AutoHotKey 1.1.33.02 or newer
 
 ## Test project Launch:
 - Clone current repository
 - Put Fortuna installation folder(with "setup.exe" file) into the project folder and name it "FortunaInstall"
-- Add txt file with admin username and password written in different lines to project folder and name it "adminInfo"
+- Add "adminInfo" file which contains admin username and password (.xml, .csv or , .xlsx extension)
+- Set 1920x1080 display resolution
 - Launch project solution as administrator using MS Visual Studio 19
+- Set "Release" solution configuration
 - Open "Test Explorer" VS tool 
 - Click "Run all tests" button
 

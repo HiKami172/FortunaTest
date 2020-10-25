@@ -12,12 +12,17 @@ using System.IO;
 namespace FortunaTest
 {
     [TestClass]
-    public class UnitTest
+    public class FortunaTest
     {
         private const string APPDRIVERURL = "http://127.0.0.1:4723";
+        private const string applicationName = "Fortuna X3";
+
         private static RemoteWebDriver appSession;
         private static WindowsDriver<WindowsElement> desktopSession;
-        private static TestCases cases;
+
+        private static AccountTests accountTests;
+        private static FileMenuBarTests functionalTests;
+
 
         [ClassInitialize]
         public static void Setup(TestContext context)
@@ -44,14 +49,14 @@ namespace FortunaTest
         }
 
         [TestMethod]
-        [Priority(-1)]
+        [Priority(0)]
         public void Installation()
         {
             Assert.IsTrue(SpecialFunctions.IsInstalled());
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void Launch()
         {
             OpenFortuna();
@@ -59,70 +64,76 @@ namespace FortunaTest
         }
 
         [TestMethod]
-        [Priority(1)]
-        public void AdminAccLogin()
-        {
-            cases.AdminAccLogin();
-        }
-
-        [TestMethod]
         [Priority(2)]
-        public void AddNewUser()
+        public void LoginAdminAccount()
         {
-            cases.AddNewUser();
+            accountTests.LoginAdminAccount();
         }
 
         [TestMethod]
         [Priority(3)]
-        public void CreateFile()
+        public void AddNewUser()
         {
-            cases.CreateFile();
+            accountTests.AddNewUser();
         }
 
         [TestMethod]
         [Priority(4)]
-        public void CheckUserCapabilities()
+        public void CreateFile()
         {
-            cases.AccountLogin("username", "password");
-            cases.CheckUserCapabilities();
+            functionalTests.CreateFile();
         }
 
         [TestMethod]
         [Priority(5)]
-        public void AccountLogout()
+        public void LoginUserAccount()
         {
-            cases.AccountLogout();
+            accountTests.LoginAccount(accountTests.username, accountTests.password);
         }
 
         [TestMethod]
         [Priority(6)]
-        public void LoginWithWrongPassword()
+        public void CheckUserCapabilities()
         {
-            cases.LoginWithWrongPassword();
+            accountTests.CheckUserCapabilities();
         }
 
         [TestMethod]
         [Priority(7)]
-        public void RemoveUser()
+        public void LogoutAccount()
         {
-            cases.RemoveUser();
+            accountTests.LogoutAccount();
         }
 
         [TestMethod]
         [Priority(8)]
+        public void LoginWithWrongCredentials()
+        {
+            accountTests.LoginWithWrongCredentials();
+        }
+
+        [TestMethod]
+        [Priority(9)]
+        public void RemoveUser()
+        {
+            accountTests.RemoveUser();
+        }
+
+        [TestMethod]
+        [Priority(10)]
         public void CloseFortuna()
         {
             appSession.Close();
             try
             {
-                desktopSession.FindElementByName("Fortuna X3");
+                desktopSession.FindElementByName(applicationName);
                 Assert.Fail();
             }
             catch { }
         }
 
         [TestMethod]
-        [Priority(9)]
+        [Priority(11)]
         public void Uninstallation()
         {
             ExecuteFromProject("\\Scripts\\unistall.exe");
@@ -139,7 +150,7 @@ namespace FortunaTest
         {
             TimeSpan timeToWait = TimeSpan.FromSeconds(3);
 
-            IWebElement appShortcut = desktopSession.FindElementByName("Fortuna X3");
+            IWebElement appShortcut = desktopSession.FindElementByName(applicationName);
             Actions actions = new Actions(desktopSession);
             DesktopHelper.ShowDesktop(desktopSession);
             actions
@@ -154,7 +165,8 @@ namespace FortunaTest
             appSession = new WindowsDriver<WindowsElement>(new Uri(APPDRIVERURL), cap);
             Assert.IsNotNull(appSession);
 
-            cases = new TestCases(appSession);
+            accountTests = new AccountTests(appSession);
+            functionalTests = new FileMenuBarTests(appSession);
 
             appSession.Manage().Timeouts().ImplicitWait = timeToWait;
         }

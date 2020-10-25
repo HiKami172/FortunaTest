@@ -24,4 +24,10 @@
     <PackageReference Include="coverlet.collector" Version="1.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Excel">
+      <HintPath>Excel.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

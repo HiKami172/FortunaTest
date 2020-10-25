@@ -11,9 +11,11 @@ namespace FortunaTest.common
         public static void CompileScripts()
         {
             TimeSpan timeToEnterCommand = TimeSpan.FromSeconds(1);
+
             string ScriptsPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\")) + "Scripts\\";
             string installScriptCompilationCommand = @"Ahk2exe.exe /in " + @ScriptsPath + "install.ahk";
             string unistallScriptCompilationCommand = @"Ahk2exe.exe /in " + @ScriptsPath + "unistall.ahk";
+
             Process cmd = new Process();
             ProcessStartInfo cmdOptions = new ProcessStartInfo
             {
@@ -23,12 +25,16 @@ namespace FortunaTest.common
                 RedirectStandardInput = true,
                 UseShellExecute = false,
             };
+
             cmd.StartInfo = cmdOptions;
             cmd.Start();
+
             cmd.StandardInput.WriteLine(installScriptCompilationCommand);
             Thread.Sleep(timeToEnterCommand);
+
             cmd.StandardInput.WriteLine(unistallScriptCompilationCommand);
             Thread.Sleep(timeToEnterCommand);
+
             cmd.Close();
         }
 

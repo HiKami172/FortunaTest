@@ -5,62 +5,38 @@ using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading;
-using System.IO;
+using FortunaTest.Dialogs;
 
 namespace FortunaTest.Test
 {
-    class TestCases
+    class AccountTests
     {
         private readonly TimeSpan timeToSleep = TimeSpan.FromSeconds(2);
+        private LoginDialog loginDialog;
         private readonly Actions enterBtn;
-        private readonly string adminUsername;
-        private readonly string adminPassword;
-        private readonly string username = "username";
-        private readonly string password = "password"; // != "1"
+
+        public readonly string username = "username";
+        public readonly string password = "password";
 
         private RemoteWebDriver appSession { get; set; }
 
-        public TestCases(RemoteWebDriver appSession)
+        public AccountTests(RemoteWebDriver appSession)
         {
             this.appSession = appSession;
+            loginDialog = new LoginDialog(appSession);
 
-            enterBtn = new Actions(appSession);
-            enterBtn
-                .SendKeys(Keys.Enter);
-            string adminInfoFilePath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\")) + "adminInfo.txt";
-            string adminInfo = File.ReadAllText(adminInfoFilePath);
-            string[] splittedInfo = adminInfo.Split('\n');
-            adminUsername = splittedInfo[0];
-            adminPassword = splittedInfo[1];
+            enterBtn = new Actions(appSession).SendKeys(Keys.Enter);
         }
 
-        public void CreateFile()
+        public void LoginAccount(string username, string password)
         {
-            IWebElement AppMenuBar = appSession.FindElementByName("Application");
-            ReadOnlyCollection<IWebElement> AppMenyBarOptions = AppMenuBar.FindElements(By.XPath(".//*"));
-            AppMenyBarOptions[1].Click();
-            Thread.Sleep(timeToSleep);
-
-            //"New file" btn click
-            Actions PointerActions = new Actions(appSession);
-            PointerActions
-                .MoveByOffset(0, 20)
-                .Click()
-                .Perform();
-            Thread.Sleep(timeToSleep);
-
-            IWebElement SetUpDialogue = appSession.FindElementByName("Document Set-up");
-            ReadOnlyCollection<IWebElement> SetUpDialogueBtns = SetUpDialogue.FindElements(By.XPath(".//Button"));
-            SetUpDialogueBtns[1].Click();
-            Thread.Sleep(timeToSleep);
-
-            IWebElement NewFileWorkspace = appSession.FindElementByName("untitled");
-            Assert.IsNotNull(NewFileWorkspace);
+            loginDialog.LoginAccount(username, password);
         }
 
-        public void AdminAccLogin()
+        public void LoginAdminAccount()
         {
-            AccountLogin(adminUsername, adminPassword);
+            loginDialog.LoginAdminAccount();
+
             IWebElement adminDialogue = appSession.FindElementByName("Fortuna Administrator");
             Assert.IsNotNull(adminDialogue);
         }
@@ -100,68 +76,27 @@ namespace FortunaTest.Test
             enterBtn.Perform();
             Thread.Sleep(timeToSleep);
 
-            Actions closeAdminAddUserDialogue = new Actions(appSession);
-            closeAdminAddUserDialogue
+            Actions closeAdminAddUserDialogue = new Actions(appSession)
                 .MoveToElement(adminAddUserDialogue, 285, 5)
-                .Click()
-                .Perform();
+                .Click();
+            closeAdminAddUserDialogue.Perform();
             Thread.Sleep(timeToSleep);
 
-            Actions closeAdminDialogue = new Actions(appSession);
-            closeAdminDialogue
+            Actions closeAdminDialogue = new Actions(appSession)
                 .MoveToElement(adminDialogue, 225, 5)
-                .Click()
-                .Perform();
-            Thread.Sleep(timeToSleep);
-        }
-
-        public void AccountLogout()
-        {
-            IWebElement applicationPane = appSession.FindElementByName("Application");
-
-            Actions clickLoginBtn = new Actions(appSession);
-            clickLoginBtn
-                .MoveToElement(applicationPane, 20, 510)
-                .Click()
-                .Perform();
-            Thread.Sleep(timeToSleep);
-
-            Actions variableLineWidthBtn = new Actions(appSession);
-            variableLineWidthBtn
-                .MoveToElement(applicationPane, 20, 535)
-                .Click()
-                .Perform();
-            Thread.Sleep(timeToSleep);
-
-            try
-            {
-                appSession.FindElementByName("Variable Line Width");
-                Assert.Fail();
-            }
-            catch { }
-        }
-
-        public void LoginWithWrongPassword()
-        {
-            string wrongPassword = "1";
-            AccountLogin(username, wrongPassword);
-
-            IWebElement loginDeniedWarning = appSession.FindElementByName("Login denied for this Fortuna session");
-            Assert.IsNotNull(loginDeniedWarning);
-            Thread.Sleep(timeToSleep);
-
-            enterBtn.Perform();
+                .Click();
+            closeAdminDialogue.Perform();
             Thread.Sleep(timeToSleep);
         }
 
         public void RemoveUser()
         {
-            AdminAccLogin();
+            LoginAdminAccount();
 
             IWebElement adminDialogue = appSession.FindElementByName("Fortuna Administrator");
             ReadOnlyCollection<IWebElement> adminDialogueOptions = adminDialogue.FindElements(By.XPath(".//*"));
             IWebElement removeUserBtn = adminDialogueOptions[3];
-    
+
             removeUserBtn.Click();
             Thread.Sleep(timeToSleep);
 
@@ -182,21 +117,19 @@ namespace FortunaTest.Test
             enterBtn.Perform();
             Thread.Sleep(timeToSleep);
 
-            Actions closeAdminRemoveUserDialogue = new Actions(appSession);
-            closeAdminRemoveUserDialogue
+            Actions closeAdminRemoveUserDialogue = new Actions(appSession)
                 .MoveToElement(adminRemoveUserDialogue, 280, 5)
-                .Click()
-                .Perform();
+                .Click();
+            closeAdminRemoveUserDialogue.Perform();
             Thread.Sleep(timeToSleep);
 
-            Actions closeAdminDialogue = new Actions(appSession);
-            closeAdminDialogue
+            Actions closeAdminDialogue = new Actions(appSession)
                 .MoveToElement(adminDialogue, 225, 5)
-                .Click()
-                .Perform();
+                .Click();
+            closeAdminDialogue.Perform();
             Thread.Sleep(timeToSleep);
 
-            AccountLogin(username, password);
+            LoginAccount(username, password);
 
             IWebElement loginDeniedWarning = appSession.FindElementByName("Login denied for this Fortuna session");
             Assert.IsNotNull(loginDeniedWarning);
@@ -204,43 +137,57 @@ namespace FortunaTest.Test
             enterBtn.Perform();
         }
 
+        public void LoginWithWrongCredentials()
+        {
+            string wrongPassword = ".";
+            string wrongUsername = ".";
+            if (username == ".")
+                wrongUsername = ",";
+            if (password == ".")
+                wrongPassword = ",";
+
+            loginDialog.LoginAccount(username, wrongPassword);
+            loginDialog.CheckForLoginDeniedWarning();
+
+            loginDialog.LoginAccount(wrongUsername, password);
+            loginDialog.CheckForLoginDeniedWarning();
+
+            loginDialog.LoginAccount(wrongUsername, wrongPassword);
+            loginDialog.CheckForLoginDeniedWarning();
+        }
+
         public void CheckUserCapabilities()
         {
             IWebElement applicationPane = appSession.FindElementByName("Application");
 
-            Actions variableLineWidthBtn = new Actions(appSession);
-            variableLineWidthBtn
+            Actions variableLineWidthBtn = new Actions(appSession)
                 .MoveToElement(applicationPane, 20, 535)
-                .Click()
-                .Perform();
+                .Click();
+            variableLineWidthBtn.Perform();
             Thread.Sleep(timeToSleep);
 
             IWebElement variableLineWidthDialogue = appSession.FindElementByName("Variable Line Width");
             Assert.IsNotNull(variableLineWidthDialogue);
         }
 
-        public void AccountLogin(string username, string password)
+        public void LogoutAccount()
         {
             IWebElement applicationPane = appSession.FindElementByName("Application");
 
-            Actions clickLoginBtn = new Actions(appSession);
-            clickLoginBtn
-                .MoveToElement(applicationPane, 20, 510)
-                .Click()
-                .Perform();
+            loginDialog.ClickLoginBtn();
+
+            Actions variableLineWidthBtn = new Actions(appSession)
+                .MoveToElement(applicationPane, 20, 535)
+                .Click();
+            variableLineWidthBtn.Perform();
             Thread.Sleep(timeToSleep);
 
-            IWebElement loginDialogue = appSession.FindElementByName("Fortuna Login");
-            ReadOnlyCollection<IWebElement> inputFields = loginDialogue.FindElements(By.XPath(".//Edit"));
-
-            inputFields[1].SendKeys(username);
-            Thread.Sleep(timeToSleep);
-
-            inputFields[0].SendKeys(password);
-            Thread.Sleep(timeToSleep);
-
-            enterBtn.Perform();
-            Thread.Sleep(timeToSleep);
+            try
+            {
+                appSession.FindElementByName("Variable Line Width");
+                Assert.Fail();
+            }
+            catch { }
         }
     }
 }

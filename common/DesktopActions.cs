@@ -21,6 +21,7 @@ namespace FortunaTest.common
                 UseShellExecute = true,
                 Verb = "runas"
             };
+
             execution.StartInfo = options;
             execution.Start();
             execution.WaitForExit();
