@@ -5,3 +5,4 @@ Scripts/install.exe
 Scripts/unistall.exe
 FortunaInstall/
 adminInfo*
+!AdminInfoParser.cs
