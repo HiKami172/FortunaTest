@@ -6,18 +6,18 @@ using System.Collections.ObjectModel;
 using System.Threading;
 using FortunaTest.MenuBar;
 
-namespace FortunaTest.Test
+namespace FortunaTest.Tests
 {
     class FileMenuBarTests
     {
         private readonly TimeSpan timeToSleep = TimeSpan.FromSeconds(2);
-        private FileMenuBar fileMenuBar;
-        private RemoteWebDriver appSession { get; set; }
+        private readonly FileMenuBar fileMenuBar;
+        private RemoteWebDriver AppSession { get; set; }
 
         public FileMenuBarTests(RemoteWebDriver appSession)
         {
-            this.appSession = appSession;
-            fileMenuBar = new FileMenuBar(appSession);
+            AppSession = appSession;
+            fileMenuBar = new FileMenuBar(AppSession);
         }
 
         public void CreateFile()
@@ -28,12 +28,12 @@ namespace FortunaTest.Test
             fileMenuBar.NewFileBtnClick();
             Thread.Sleep(timeToSleep);
 
-            IWebElement SetUpDialogue = appSession.FindElementByName("Document Set-up");
+            IWebElement SetUpDialogue = AppSession.FindElementByName("Document Set-up");
             ReadOnlyCollection<IWebElement> SetUpDialogueBtns = SetUpDialogue.FindElements(By.XPath(".//Button"));
             SetUpDialogueBtns[1].Click();
             Thread.Sleep(timeToSleep);
 
-            IWebElement NewFileWorkspace = appSession.FindElementByName("untitled");
+            IWebElement NewFileWorkspace = AppSession.FindElementByName("untitled");
             Assert.IsNotNull(NewFileWorkspace);
         }
     }

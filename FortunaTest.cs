@@ -1,4 +1,4 @@
-using FortunaTest.Test;
+using FortunaTest.Tests;
 using FortunaTest.common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
@@ -15,7 +15,7 @@ namespace FortunaTest
     public class FortunaTest
     {
         private const string APPDRIVERURL = "http://127.0.0.1:4723";
-        private const string applicationName = "Fortuna X3";
+        private const string APPLICATIONNAME = "Fortuna X3";
 
         private static RemoteWebDriver appSession;
         private static WindowsDriver<WindowsElement> desktopSession;
@@ -50,7 +50,7 @@ namespace FortunaTest
 
         [TestMethod]
         [Priority(0)]
-        public void Installation()
+        public void Install()
         {
             Assert.IsTrue(SpecialFunctions.IsInstalled());
         }
@@ -126,15 +126,15 @@ namespace FortunaTest
             appSession.Close();
             try
             {
-                desktopSession.FindElementByName(applicationName);
+                desktopSession.FindElementByName(APPLICATIONNAME);
                 Assert.Fail();
             }
-            catch { }
+            catch (NoSuchElementException) { }
         }
 
         [TestMethod]
         [Priority(11)]
-        public void Uninstallation()
+        public void Uninstall()
         {
             ExecuteFromProject("\\Scripts\\unistall.exe");
             Assert.IsFalse(SpecialFunctions.IsInstalled());
@@ -150,12 +150,11 @@ namespace FortunaTest
         {
             TimeSpan timeToWait = TimeSpan.FromSeconds(3);
 
-            IWebElement appShortcut = desktopSession.FindElementByName(applicationName);
+            IWebElement appShortcut = desktopSession.FindElementByName(APPLICATIONNAME);
             Actions actions = new Actions(desktopSession);
             DesktopHelper.ShowDesktop(desktopSession);
-            actions
-                .DoubleClick(appShortcut)
-                .Perform();
+            actions.DoubleClick(appShortcut)
+                   .Perform();
 
             var appWindow = desktopSession.FindElementByName("Fortuna");
             var appTopLevelWindowHandle = appWindow.GetAttribute("NativeWindowHandle");

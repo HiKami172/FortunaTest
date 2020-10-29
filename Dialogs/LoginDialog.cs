@@ -5,7 +5,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.IO;
-using FortunaTest.common;
+using FortunaTest.WrapperFactory;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 
 namespace FortunaTest.Dialogs
 {
@@ -13,30 +15,30 @@ namespace FortunaTest.Dialogs
     {
         private readonly TimeSpan timeToSleep = TimeSpan.FromSeconds(2);
 
-        private string adminUsername;
-        private string adminPassword;
+        private string AdminUsername { get; }
+        private string AdminPassword { get; }
 
-        private Actions enterBtn;
-        private Actions clickLoginBtn;  
+        private readonly Actions enterBtn;
+        private readonly Actions clickLoginBtn;  
 
-        private RemoteWebDriver appSession { get; set; }
+        private RemoteWebDriver AppSession { get; set; }
 
         public LoginDialog(RemoteWebDriver appSession)
         {
-            this.appSession = appSession;
+            AppSession = appSession;
 
-            enterBtn = new Actions(appSession).SendKeys(Keys.Enter);
+            enterBtn = new Actions(AppSession).SendKeys(Keys.Enter);
 
-            IWebElement applicationPane = appSession.FindElementByName("Application");
+            IWebElement applicationPane = AppSession.FindElementByName("Application");
 
-            clickLoginBtn = new Actions(appSession)
+            clickLoginBtn = new Actions(AppSession)
                 .MoveToElement(applicationPane, 20, 510)
                 .Click();
 
             string projectDirPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\"));
-            (string, string) usernameXpassword = AdminInfoParser.GetAdminInfo(projectDirPath);
-            adminUsername = usernameXpassword.Item1;
-            adminPassword = usernameXpassword.Item2;
+            List<string> usernameXpassword = AdminInfoParser.GetAdminInfo(projectDirPath);
+            AdminUsername = usernameXpassword[0];
+            AdminPassword = usernameXpassword[1];
         }
 
         public void ClickLoginBtn()
@@ -48,7 +50,7 @@ namespace FortunaTest.Dialogs
         {
             ClickLoginBtn();
 
-            IWebElement loginDialogue = appSession.FindElementByName("Fortuna Login");
+            IWebElement loginDialogue = AppSession.FindElementByName("Fortuna Login");
             ReadOnlyCollection<IWebElement> inputFields = loginDialogue.FindElements(By.XPath(".//Edit"));
 
             inputFields[1].SendKeys(username);
@@ -63,12 +65,12 @@ namespace FortunaTest.Dialogs
 
         public void LoginAdminAccount()
         {
-            LoginAccount(adminUsername, adminPassword);
+            LoginAccount(AdminUsername, AdminPassword);
         }
 
         public void CheckForLoginDeniedWarning()
         {
-            IWebElement loginDeniedWarning = appSession.FindElementByName("Login denied for this Fortuna session");
+            IWebElement loginDeniedWarning = AppSession.FindElementByName("Login denied for this Fortuna session");
             Assert.IsNotNull(loginDeniedWarning);
             Thread.Sleep(timeToSleep);
 
