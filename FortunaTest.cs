@@ -1,5 +1,5 @@
 using FortunaTest.Tests;
-using FortunaTest.common;
+using FortunaTest.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;

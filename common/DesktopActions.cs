@@ -2,7 +2,7 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Windows;
 
-namespace FortunaTest.common
+namespace FortunaTest.Common
 {
     public class DesktopHelper
     {

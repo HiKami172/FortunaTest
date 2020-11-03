@@ -35,7 +35,8 @@ namespace FortunaTest.Dialogs
                 .MoveToElement(applicationPane, 20, 510)
                 .Click();
 
-            string projectDirPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\"));
+            string workingDirectory = Environment.CurrentDirectory;
+            string projectDirPath = Directory.GetParent(workingDirectory).Parent.Parent.FullName + @"\FilesForParse";
             List<string> usernameXpassword = AdminInfoParser.GetAdminInfo(projectDirPath);
             AdminUsername = usernameXpassword[0];
             AdminPassword = usernameXpassword[1];

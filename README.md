@@ -13,7 +13,7 @@ Repository includes test project for Fortuna X3 Application
 
 ## Test project Launch:
 - Clone current repository
-- Add "adminInfo" file which contains username and password 
+- Add "adminInfo" file which contains username and password to FileForParse directory
 - Set 1920x1080 display resolution
 - Launch project solution as administrator using MS Visual Studio 19
 - Set Fortuna installation folder path in .ahk scripts

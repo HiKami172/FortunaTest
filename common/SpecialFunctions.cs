@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 
-namespace FortunaTest.common
+namespace FortunaTest.Common
 {
     class SpecialFunctions
     {
