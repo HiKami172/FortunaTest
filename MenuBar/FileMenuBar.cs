@@ -16,7 +16,7 @@ namespace FortunaTest.MenuBar
             appMenuBarOptions = appMenuBar.FindElements(By.XPath(".//*"));
 
             newFileBtnClick = new Actions(appSession)
-                .MoveToElement(appMenuBarOptions[1], 0, 20)
+                .MoveToElement(appMenuBarOptions[1], 5, 25)
                 .Click();
         }
 

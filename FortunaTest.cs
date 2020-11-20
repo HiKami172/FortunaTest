@@ -1,6 +1,5 @@
 using FortunaTest.Tests;
 using FortunaTest.Common;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Windows;
@@ -8,10 +7,12 @@ using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Remote;
 using System;
 using System.IO;
+using NUnit.Framework;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace FortunaTest
 {
-    [TestClass]
+    [TestFixture]
     public class FortunaTest
     {
         private const string APPDRIVERURL = "http://127.0.0.1:4723";
@@ -24,8 +25,8 @@ namespace FortunaTest
         private static FileMenuBarTests functionalTests;
 
 
-        [ClassInitialize]
-        public static void Setup(TestContext context)
+        [SetUp]
+        public static void Setup()
         {
             SpecialFunctions.CompileScripts();
 
@@ -41,99 +42,80 @@ namespace FortunaTest
             desktopSession.Manage().Timeouts().ImplicitWait = timeToStart;
         }
 
-        [ClassCleanup]
-        public static void TestsCleanup()
-        {
-            appSession.Dispose();
-            appSession = null;
-        }
-
-        [TestMethod]
-        [Priority(0)]
+        [Test, Order(1)]
         public void Install()
         {
             Assert.IsTrue(SpecialFunctions.IsInstalled());
         }
 
-        [TestMethod]
-        [Priority(1)]
+        [Test, Order(2)]
         public void Launch()
         {
             OpenFortuna();
             Assert.IsNotNull(appSession);
         }
 
-        [TestMethod]
-        [Priority(2)]
+        [Test, Order(3)]
         public void LoginAdminAccount()
         {
             accountTests.LoginAdminAccount();
         }
 
-        [TestMethod]
-        [Priority(3)]
+        [Test, Order(4)]
         public void AddNewUser()
         {
             accountTests.AddNewUser();
         }
 
-        [TestMethod]
-        [Priority(4)]
+        [Test, Order(5)]
         public void CreateFile()
         {
             functionalTests.CreateFile();
         }
 
-        [TestMethod]
-        [Priority(5)]
+        [Test, Order(6)]
         public void LoginUserAccount()
         {
             accountTests.LoginAccount(accountTests.username, accountTests.password);
         }
 
-        [TestMethod]
-        [Priority(6)]
+        [Test, Order(7)]
         public void CheckUserCapabilities()
         {
             accountTests.CheckUserCapabilities();
         }
 
-        [TestMethod]
-        [Priority(7)]
+        [Test, Order(8)]
         public void LogoutAccount()
         {
             accountTests.LogoutAccount();
         }
 
-        [TestMethod]
-        [Priority(8)]
+        [Test, Order(9)]
         public void LoginWithWrongCredentials()
         {
             accountTests.LoginWithWrongCredentials();
         }
 
-        [TestMethod]
-        [Priority(9)]
+        [Test, Order(10)]
         public void RemoveUser()
         {
             accountTests.RemoveUser();
         }
 
-        [TestMethod]
-        [Priority(10)]
+        [Test, Order(11)]
         public void CloseFortuna()
         {
             appSession.Close();
             try
             {
-                desktopSession.FindElementByName(APPLICATIONNAME);
+                desktopSession.FindElementByName("Fortuna");
                 Assert.Fail();
             }
-            catch (NoSuchElementException) { }
+            catch (WebDriverException) { }
         }
 
-        [TestMethod]
-        [Priority(11)]
+        [Test, Order(12)]
         public void Uninstall()
         {
             ExecuteFromProject("\\Scripts\\unistall.exe");

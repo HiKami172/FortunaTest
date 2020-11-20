@@ -187,7 +187,7 @@ namespace FortunaTest.Tests
                 AppSession.FindElementByName("Variable Line Width");
                 Assert.Fail();
             }
-            catch (NoSuchElementException) { }
+            catch (WebDriverException) { }
         }
     }
 }

@@ -12,6 +12,8 @@ timeToWait := 700
 Run, setup.exe, %Parent%\FortunaInstall
 Sleep, %timeToStart%
 
+WinActivate, Agfa Fortuna v 13.0 - InstallShield Wizard
+
 Send {Down 2}{Enter}
 Sleep, %timeToWait%
 
